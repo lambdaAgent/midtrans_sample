@@ -1,0 +1,13 @@
+{
+   "dbConfig": {
+        "host": "localhost",
+        "port": 5984,
+        "dbName": "customers"
+    },
+    "midtrans": {
+        "apiUrl": "https://api.sandbox.midtrans.com/v2"
+    },
+    "server": {
+        "port": 7000
+    }
+}
