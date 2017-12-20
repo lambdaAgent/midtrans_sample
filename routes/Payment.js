@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 const config = require('config');
-const fetch = require('node-fetch');
-
 
 // create authentication system,
 // this auth system only uses token.
