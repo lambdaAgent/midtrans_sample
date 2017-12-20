@@ -1,5 +1,6 @@
 {
-   "dbConfig": {
+    "environment": "staging",
+    "dbConfig": {
         "host": "localhost",
         "port": 5984,
         "dbName": "customers"

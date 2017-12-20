@@ -1,4 +1,5 @@
-{
+{   
+    "environment": "production",
     "dbConfig": {
         "host": "localhost",
         "port": 5984,

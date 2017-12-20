@@ -10,11 +10,14 @@ const fetch = require('node-fetch');
 
 /* CHARGE */
 router.post('/token', (req, res, next) => {
-    console.log('BODY', req.body);
+    if(!req.body.hasOwnProperty('transaction_detail')){
+        res.status(400)
+    }
     let transaction_details = req.body.transaction_details;
         transaction_details.gross_amount = Number(transaction_details.gross_amount);
     let item_details = req.body.item_details;
     let customer_details = req.body.customer_details;
+
     const url = config.midtrans.snap;
     const serverKey = config.midtrans.Server_Key + ':';
     const encodeServerKey = new Buffer(serverKey).toString('base64');

@@ -1,17 +1,14 @@
 {
+    "environment": "staging",
     "dbConfig": {
-          "host": "localhost",
-          "port": 5984,
-          "dbName": "customers"
-     },
-     "midtrans": {
-          "apiUrl": "https://api.sandbox.midtrans.com/v2",
-          "snap": "https://app.sandbox.midtrans.com/snap/v1/transactions",
-          "Merchant_ID": "M117376",
-          "Client_Key" : "SB-Mid-client-rONwRSEX8yJxu3qn",
-          "Server_Key" : "SB-Mid-server-ISWB_pkk5b3CbQ80j1i6JNcD"
-     },
-     "server": {
-         "port": 7000
-     }
- }
+        "host": "localhost",
+        "port": 5984,
+        "dbName": "customers"
+    },
+    "midtrans": {
+        "apiUrl": "https://api.sandbox.midtrans.com/v2"
+    },
+    "server": {
+        "port": 7000
+    }
+}
