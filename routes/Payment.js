@@ -9,7 +9,7 @@ const config = require('config');
 /* CHARGE */
 router.post('/token', (req, res, next) => {
     console.log('BODY', req.body)
-    if(!req.body.hasOwnProperty('transaction_detail') ||
+    if(!req.body.hasOwnProperty('transaction_details') ||
        !req.body.hasOwnProperty('item_details') ||
        !req.body.hasOwnProperty('customer_details')
       ){
