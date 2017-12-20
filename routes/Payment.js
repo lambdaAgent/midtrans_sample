@@ -8,6 +8,7 @@ const config = require('config');
 
 /* CHARGE */
 router.post('/token', (req, res, next) => {
+    console.log('BODY', req.body)
     if(!req.body.hasOwnProperty('transaction_detail') ||
        !req.body.hasOwnProperty('item_details') ||
        !req.body.hasOwnProperty('customer_details')
@@ -15,7 +16,6 @@ router.post('/token', (req, res, next) => {
         res.status(400);
         return res.end();
     }
-    console.log('BODY', req.body)
     let transaction_details = req.body.transaction_details;
         transaction_details.gross_amount = Number(transaction_details.gross_amount);
     let item_details = req.body.item_details;
