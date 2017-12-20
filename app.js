@@ -10,7 +10,7 @@ const helmet = require("helmet");
 const config = require('config');
 const cors = require('cors');
 const corsOptions = {
-  origin: 'https://test-payment-cbd9c.firebaseapp.com/',
+  origin: 'https://test-payment-cbd9c.firebaseapp.com',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
@@ -20,10 +20,10 @@ var app = express();
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use( cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use( cors(corsOptions));
 app.use('/', require('./routes/index'));
 app.use('/payment', require('./routes/Payment'))
 
