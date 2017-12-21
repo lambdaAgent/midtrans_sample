@@ -44,7 +44,7 @@ new Promise((resolve, reject) => {
                 if(arrayData[0].indexOf('heroku-app-name=') === 0){
                     const line = arrayData[0];
                     herokuAppName = line.replace('heroku-app-name=', '');
-                    cmdAsync(`git remote rm heroku`);
+                    cmdAsync(`git remote rm heroku`).catch(err => {console.log('NO remote heroku')});
                     cmdAsync(`heroku git:remote -a ${herokuAppName}`)
                     // cmdAsync(`git remote set-url heroku https://git.heroku.com/${herokuAppName}.git`)
                      .then(result => {
@@ -58,10 +58,12 @@ new Promise((resolve, reject) => {
                 const configSet = arrayData.map(line => {
                     if(!line || line[0] === '#'  || line.indexOf('=') < 0) return Promise.resolve();
                     line = line.split('#')[0];
+                    line = line.replace('\n', '');
                     return cmdAsync(`heroku config:set ${line}`)
                 });
                 Promise.all(configSet)
                 .then(outerResolve)
+                .catch(err => {throw new Error(err)})
 
             })
             
@@ -70,8 +72,10 @@ new Promise((resolve, reject) => {
     })
 })
 .then(result => {
+    console.log('RESULT', result);
+    console.log('Deploying to heroku');
     // push this file to heroku
-    cmdAsync(`git push staging master`);
+    cmdAsync(`git push staging master`).then(res => console.log(res))
 })
 .catch(messageError => {
     console.log(messageError);
@@ -102,13 +106,20 @@ const cmdAsync = (commandLineString) => {
         cmd.get(
             commandLineString,
             function(err, data, stderr){
-                console.log(data);
-                if(err) console.log(err)
-                if(stderr) console.log(stderr)
-                resolve();
+                if(data && commandLineString.indexOf('git push') === 0 || commandLineString.indexOf('heroku git:remote -a') === 0){
+                    console.log(data);
+                }
+                if(err && commandLineString.indexOf('rm heroku') > 0){
+                    return resolve();
+                }
+                if(err) {
+                    console.error(err);
+                    console.log('failed at: ' + commandLineString)
+                    throw new Error(err);
+                }
                 if(err) return reject(err);
-                if(stderr) return reject(stderr);
-                if(data) return resolve(data)
+                if(stderr) return resolve(stderr);
+                if(data) return resolve(data);
             }
         );
     })
