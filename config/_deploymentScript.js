@@ -56,8 +56,8 @@ new Promise((resolve, reject) => {
             })
             .then(result => {
                 const configSet = arrayData.map(line => {
-                    if(!line || line[0] === '#'  || line.indexOf('=') < 0) return Promise.resolve();
                     line = line.split('#')[0];
+                    if(!line || line.length === 0 || line[0] === '#'  || line.indexOf('=') < 0) return Promise.resolve();
                     line = line.replace('\n', '');
                     return cmdAsync(`heroku config:set ${line}`)
                 });
