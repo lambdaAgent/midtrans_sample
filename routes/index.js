@@ -7,7 +7,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.json({ hello: 'world' });
+  res.json({ hello: proccess.env.enviroment });
 });
 
 module.exports = router;

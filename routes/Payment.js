@@ -8,14 +8,14 @@ const config = require('config');
 
 /* CHARGE */
 router.post('/token', (req, res, next) => {
-    console.log('BODY', req.body)
+    
     if(!req.body.hasOwnProperty('transaction_details') ||
        !req.body.hasOwnProperty('item_details') ||
        !req.body.hasOwnProperty('customer_details')
       ){
-        res.status(400);
-        return res.end();
+        return res.status(400).json({reason: 'Some Required fields are empty'});
     }
+
     let transaction_details = req.body.transaction_details;
         transaction_details.gross_amount = Number(transaction_details.gross_amount);
     let item_details = req.body.item_details;
@@ -40,10 +40,27 @@ router.post('/token', (req, res, next) => {
     .then(result => result.json())
     .then(result => res.json(result))
     .catch(err => res.send(err));
-})
+});
 
-/* GET token */
-router.get('/token2', function(req, res, next) {
+/* POST */
+/** fetch payment status from midtrans*/
+router.post('/status', function(req, res, next) {
+    // req.body.authToken
+    fetch(config.midtrans.snap)
+    .then(result => result.json())
+    .then(result => res.json(result))
+    .catch(err => req.status(400).json({reason: 'midtrans failed ' + err}))
+  });
+
+
+  
+router.get('/unfinish');
+router.get('/error');
+router.get('/notification');
+
+/* Midtrans will use this token 
+   to notify the result of the payment */
+router.get('/finish', function(req, res, next) {
 
     const url = config.midtrans.snap;
     const serverKey = config.midtrans.Server_Key + ':';
@@ -67,27 +84,12 @@ router.get('/token2', function(req, res, next) {
     });
 });
 
-/* POST */
-router.get('/', function(req, res, next) {
-    // req.body.authToken
-    const ccData =  req.body.ccData;
-    const grossPrice = req.body.grossPrice;
-    
-    const serverKey = "94960ece-9513-4265-9cf2-67a4da330213:"
-    const encodeServerKey = new Buffer(serverKey).toString('base64');
-    console.log(serverKey);
-    fetch(config.midtrans.apiUrl, { 
-        method: 'POST', 
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": serverKey 
-        },
-        body: 'a=1' 
-    })
-    .then(result => {
-        res.send(result)
-    });
-});
+
+
+/** POST status payment to User */
+// can user initiate request?
+
+
+
 
 module.exports = router;
