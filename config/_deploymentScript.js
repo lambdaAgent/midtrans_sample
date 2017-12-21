@@ -56,7 +56,8 @@ new Promise((resolve, reject) => {
             })
             .then(result => {
                 const configSet = arrayData.map(line => {
-                    if(!line || line.indexOf('=') < 0) return Promise.resolve();
+                    if(!line || line[0] === '#'  || line.indexOf('=') < 0) return Promise.resolve();
+                    line = line.split('#')[0];
                     return cmdAsync(`heroku config:set ${line}`)
                 });
                 Promise.all(configSet)

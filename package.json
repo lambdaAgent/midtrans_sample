@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "development=true nodemon ./bin/www",
+    "start": "node bin/www",
+    "dev": "development=true nodemon ./bin/www",
     "deploy_staging": "node config/_deploymentScript.js -env staging",
     "deploy_production": "node config/_deploymentScript.js -env production"
   },
