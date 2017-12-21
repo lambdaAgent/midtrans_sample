@@ -1,0 +1,22 @@
+{
+  "name": "midtrans_sample_staging",
+  "description": "",
+  "scripts": {
+    "postdeploy": "NODE_ENV=staging node bin/www"
+  },
+  "env": {
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
