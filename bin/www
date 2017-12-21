@@ -3,19 +3,19 @@
 /**
  * Module dependencies.
  */
+if(process.env.development === 'true'){
+  require('dotenv').config({ path: 'config/.env_development'})
+}
 
 var app = require('../app');
 var debug = require('debug')('payment:server');
 var http = require('http');
-var config = require('config');
-
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || config.server.port);
+var port = normalizePort(process.env.PORT);
 app.set('port', port);
-
 /**
  * Create HTTP server.
  */
