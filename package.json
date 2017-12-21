@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=production node ./bin/www"
+    "start": "NODE_ENV=production node ./bin/www",
+    "deploy_staging": "node config/_deploymentScript.js -env staging",
+    "deploy_production": "node config/_deploymentScript.js -env production"
   },
   "dependencies": {
     "body-parser": "~1.16.0",

@@ -37,29 +37,33 @@ new Promise((resolve, reject) => {
     return new Promise((resolve, reject) => {
         fs.readFile('./config/'+foundFileName, 'utf8', (err, data) => {
             if(err) return reject(err);
-            
+
             let herokuAppName;
             const arrayData = data.split('\n');
-            forEachAsync(arrayData, (line, lineIndex, next) => {
+            function loopAndAssign(line, lineIndex, next){
                 // found heroku app name and set it
-                if(line === '') return next();
                 if(lineIndex === arrayData.length-1){
                     // if lastLine, then go to next step
                     resolve();
                 }
-                if(line.indexOf('heroku-app-name=') === 0){
-                    herokuAppName = line.replace('heroku-app-name=', '');   
+                if(line && line.indexOf('heroku-app-name=') === 0){
+                    herokuAppName = line.replace('heroku-app-name=', '');
                     cmdAsync(`heroku git:remote -a ${herokuAppName}`)
-                    .then(result => next())
+                    .then(loopAndAssign)
+                } 
+                if(!herokuAppName) {
+                    throw new Error('no heroku-app-name');
                 }
-
-                if(!herokuAppName) throw new Error('no heroku-app-name');
                 
-                // if line is not herokuAppName, then assign the variable to heroku variable;
-                cmdAsync(`heroku config:set ${line}`)
-                .then(next());
-                
-            })
+                if(herokuAppName){
+                    // only run this after heroku-app-name is set
+                    // if line is not herokuAppName, then assign the variable to heroku variable;
+                    cmdAsync(`heroku config:set ${line}`)
+                    .then(next());
+                }
+            }
+            forEachAsync(arrayData, loopAndAssign)
+            
         })
     })
 })
@@ -81,11 +85,11 @@ new Promise((resolve, reject) => {
     // set heroku app name
     // heroku git:remote -a [heroku-app-name]
 
-    // and loop for each line and set the environment 
+    // and loop for each line and set the environment
     // remove '\n'
     // heroku config:set [eachline]
 
-    // 
+    //
 
 
 
@@ -110,14 +114,14 @@ const cmdAsync = (commandLineString) => {
 const forEachAsync = (array, func, index=0) => {
     let lastIndex = array.length-1;
     if(index > lastIndex) return;
-    
+
     function next(nextIndex){
         return function(){
-            forEachAsync(array, func, nextIndex);
+            return forEachAsync(array, func, nextIndex);
         }
     }
     const currentElement = array[index];
     const currentIndex = index;
     const nextIndex = index + 1;
-    func(currentElement, currentIndex, next(nextIndex))
+    return func(currentElement, currentIndex, next(nextIndex))
 }
