@@ -34,42 +34,43 @@ new Promise((resolve, reject) => {
 .then(foundFileName => {
     // 1. set the heroku-app-name
     // 2. assign each variable to heroku:config
-    return new Promise((resolve, reject) => {
+    return new Promise((outerResolve, reject) => {
         fs.readFile('./config/'+foundFileName, 'utf8', (err, data) => {
             if(err) return reject(err);
 
             let herokuAppName;
             const arrayData = data.split('\n');
-            function loopAndAssign(line, lineIndex, next){
-                // found heroku app name and set it
-                if(lineIndex === arrayData.length-1){
-                    // if lastLine, then go to next step
-                    resolve();
-                }
-                if(line && line.indexOf('heroku-app-name=') === 0){
+            new Promise(resolve => {
+                if(arrayData[0].indexOf('heroku-app-name=') === 0){
+                    const line = arrayData[0];
                     herokuAppName = line.replace('heroku-app-name=', '');
+                    cmdAsync(`git remote rm heroku`);
                     cmdAsync(`heroku git:remote -a ${herokuAppName}`)
-                    .then(loopAndAssign)
-                } 
-                if(!herokuAppName) {
-                    throw new Error('no heroku-app-name');
+                    // cmdAsync(`git remote set-url heroku https://git.heroku.com/${herokuAppName}.git`)
+                     .then(result => {
+                         setTimeout(() => resolve(), 1000)
+                     })
+                } else {
+                    throw new Error('must define heroku-app-name at first line');
                 }
-                
-                if(herokuAppName){
-                    // only run this after heroku-app-name is set
-                    // if line is not herokuAppName, then assign the variable to heroku variable;
-                    cmdAsync(`heroku config:set ${line}`)
-                    .then(next());
-                }
-            }
-            forEachAsync(arrayData, loopAndAssign)
+            })
+            .then(result => {
+                const configSet = arrayData.map(line => {
+                    if(!line || line.indexOf('=') < 0) return Promise.resolve();
+                    return cmdAsync(`heroku config:set ${line}`)
+                });
+                Promise.all(configSet)
+                .then(outerResolve)
+
+            })
+            
             
         })
     })
 })
 .then(result => {
     // push this file to heroku
-    cmdAsync(`git push heroku master`);
+    cmdAsync(`git push staging master`);
 })
 .catch(messageError => {
     console.log(messageError);
@@ -101,6 +102,8 @@ const cmdAsync = (commandLineString) => {
             commandLineString,
             function(err, data, stderr){
                 console.log(data);
+                if(err) console.log(err)
+                if(stderr) console.log(stderr)
                 resolve();
                 if(err) return reject(err);
                 if(stderr) return reject(stderr);
