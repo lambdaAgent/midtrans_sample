@@ -3,10 +3,7 @@
 /**
  * Module dependencies.
  */
-if(process.env.development === 'true'){
-  require('dotenv').config({ path: 'config/.env_development'})
-}
-
+require('dotenv').load();
 var app = require('../app');
 var debug = require('debug')('payment:server');
 var http = require('http');
