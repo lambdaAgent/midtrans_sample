@@ -75,7 +75,7 @@ new Promise((resolve, reject) => {
     console.log('RESULT', result);
     console.log('Deploying to heroku');
     // push this file to heroku
-    cmdAsync(`git push staging master`).then(res => console.log(res))
+    cmdAsync(`git push heroku master`).then(res => console.log(res))
 })
 .catch(messageError => {
     console.log(messageError);
