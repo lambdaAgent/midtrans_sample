@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+require('dotenv').config({path: './config/.env_deployment'});
 require('dotenv').load();
 var app = require('../app');
 var debug = require('debug')('payment:server');
