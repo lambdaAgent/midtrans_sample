@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npm install -g pm2",
-    "pm2_start": "pm2 start app.js -i max --attach",
+    "pm2_start": "pm2 start bin/www -i max --attach",
     "dev": "development=true nodemon ./bin/www",
     "deploy_staging": "node config/_deploymentScript.js -env staging",
     "deploy_production": "node config/_deploymentScript.js -env production"
