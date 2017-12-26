@@ -22,6 +22,7 @@
     "lusca": "^1.5.2",
     "morgan": "~1.7.0",
     "node-cmd": "^3.0.0",
-    "serve-favicon": "~2.3.2"
+    "serve-favicon": "~2.3.2",
+    "whatwg-fetch": "^2.0.3"
   }
 }

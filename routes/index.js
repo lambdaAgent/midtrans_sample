@@ -1,25 +1,14 @@
 var express = require('express');
 var router = express.Router();
-
+const fetch = require('whatwg-fetch');
+const userController = require('../Controller/userController')
 // create authentication system,
 // this auth system only uses token.
 // this machine does not communicate directly with FE, only with another BE machine
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.json({ hello: process.env.environment });
-});
+// router.get('/', userController.);
 
-router.post('/test', function(req, res, next){
-  fetch('http:localhost:7000/token', {
-    method: 'POST',
-    body: JSON.stringify({
-      token: 2457872398457907
-    }),
-
-  })
-  .then(console.log)
-  .catch(console.error)
-})
+router.post('/test', userController.checkToken)
 
 module.exports = router;
