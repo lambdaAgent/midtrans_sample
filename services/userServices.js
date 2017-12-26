@@ -1,6 +1,6 @@
 const paymentDomain = process.env.DOMAIN;
 
-exports.getToken = function(token){
+exports.checkToken = function(token){
   return new Promise((resolve, reject) => {
     fetch('http:localhost:7000/token', {
       method: 'POST',
