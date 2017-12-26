@@ -10,4 +10,16 @@ router.get('/', function(req, res, next) {
   res.json({ hello: process.env.environment });
 });
 
+router.post('/test', function(req, res, next){
+  fetch('http:localhost:7000/token', {
+    method: 'POST',
+    body: JSON.stringify({
+      token: 2457872398457907
+    }),
+
+  })
+  .then(console.log)
+  .catch(console.error)
+})
+
 module.exports = router;
