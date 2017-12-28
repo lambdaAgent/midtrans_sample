@@ -85,7 +85,6 @@ router.get('/finish', function(req, res, next) {
 });
 
 
-
 /** POST status payment to User */
 // can user initiate request?
 

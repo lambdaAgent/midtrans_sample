@@ -45,11 +45,10 @@ app.use(function(err, req, res, next) {
   res.locals.error = process.env.environment === 'staging' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.json({
+  res.status(err.status || 500).json({
     status: err.status,
-    reason: res.locals
-  });
+    reason: err
+  })
 });
 
 module.exports = app;
